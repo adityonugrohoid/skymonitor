@@ -20,21 +20,21 @@ jobs:
       - name: No key-like strings
         run: |
           set -e
-          if grep -rnE "[0-9a-f]{32}" --include='*.html' --include='*.ts' --include='*.toml' --include='*.sh' --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=fixtures . ; then
+          if grep -rnE "[0-9a-f]{32}" --include='*.html' --include='*.ts' --include='*.toml' --include='*.sh' --include='*.yml' --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=fixtures . ; then
             echo "possible key found"; exit 1; fi
 
-  worker:
+  pipeline:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: worker
+        working-directory: pipeline
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: worker/package-lock.json
+          cache-dependency-path: pipeline/package-lock.json
       - run: npm ci
       - run: npm run typecheck
       - run: npm test

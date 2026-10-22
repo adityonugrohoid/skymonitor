@@ -23,7 +23,7 @@ weather data for Indonesia's fire and haze season. It labels every model as a
 model, relays official statements unaltered with credit, and never issues
 warnings, alert levels or categories of its own.
 
-How it works: a scheduled Cloudflare Worker fetches every upstream source,
+How it works: a scheduled GitHub Actions job fetches every upstream source,
 processes it, renders one card per kecamatan and writes static files to R2.
 The browser reads only those files. When any feed is older than its
 threshold the site hides every number and shows only the official sources.
