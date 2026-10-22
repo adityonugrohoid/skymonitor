@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sky Monitor</title>
+<style>
+  :root { --bg: #ffffff; --fg: #1a1a1a; --muted: #5a5a5a; --line: #d9d9d9; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #141414; --fg: #ececec; --muted: #a0a0a0; --line: #333333; }
+  }
+  :root[data-theme="dark"] { --bg: #141414; --fg: #ececec; --muted: #a0a0a0; --line: #333333; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; max-width: 640px; margin-inline: auto; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  .muted { color: var(--muted); }
+  .strip { border-top: 1px solid var(--line); margin-top: 24px; padding-top: 12px; font-size: 0.9rem; }
+  .strip a { margin-right: 12px; }
+  #notice { padding: 12px; border: 1px solid var(--line); border-radius: 6px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<h1>Sky Monitor</h1>
+<p class="muted">Data langit untuk Indonesia, dalam bahasa yang jelas.</p>
+<div id="notice">Memuat status data...</div>
+<div class="strip">
+  Sumber resmi:
+  <a href="https://www.bmkg.go.id/" rel="noopener">BMKG</a>
+  <a href="https://ispu.menlhk.go.id/" rel="noopener">ISPUnet (KLHK)</a>
+  <a href="https://sipongi.gakkum.kehutanan.go.id/" rel="noopener">SiPongi (KLHK)</a>
+</div>
+<script>
+(async function () {
+  var el = document.getElementById("notice");
+  try {
+    var r = await fetch("/latest/status.json", { cache: "no-store" });
+    if (!r.ok) { throw new Error("status " + r.status); }
+    var s = await r.json();
+    var stale = Object.keys(s.feeds).filter(function (k) { return s.feeds[k].stale; });
+    if (stale.length > 0) {
+      el.textContent = "Data belum tersedia atau tidak diperbarui (" + stale.join(", ") + "). Lihat sumber resmi di bawah.";
+      return;
+    }
+    el.textContent = "Data diperbarui " + s.generated_at + ".";
+  } catch (e) {
+    el.textContent = "Status data tidak dapat dimuat. Lihat sumber resmi di bawah.";
+  }
+})();
+</script>
+</body>
+</html>

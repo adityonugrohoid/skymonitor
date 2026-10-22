@@ -1,0 +1,40 @@
+name: checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  scans:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: ASCII punctuation in prose
+        run: |
+          set -e
+          if grep -rnP "[\x{2014}\x{2013}\x{2011}\x{2212}\x{2026}\x{2022}\x{00B7}\x{2192}\x{21D2}\x{00B1}\x{00D7}\x{00F7}\x{2264}\x{2265}\x{2260}\x{2248}\x{00A0}\x{202F}\x{2009}\x{200B}\x{200C}\x{200D}\x{FEFF}\x{3000}\x{2018}\x{2019}\x{201C}\x{201D}\x{201E}\x{201A}\x{2032}\x{2033}]" \
+            --include='*.md' --include='*.html' --include='*.ts' --include='*.json' --include='*.toml' --include='*.yml' \
+            --exclude='LICENSE-DATA' --exclude-dir=node_modules --exclude-dir=.git . ; then
+            echo "non-ASCII punctuation found"; exit 1; fi
+      - name: No key-like strings
+        run: |
+          set -e
+          if grep -rnE "[0-9a-f]{32}" --include='*.html' --include='*.ts' --include='*.toml' --include='*.sh' --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=fixtures . ; then
+            echo "possible key found"; exit 1; fi
+
+  worker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: worker/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test

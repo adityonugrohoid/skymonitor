@@ -1,0 +1,21 @@
+{
+  "source": "Permen LHK P.14/MENLHK/SETJEN/KUM.1/7/2020, Lampiran I (breakpoints) and Lampiran II (categories, colours, advice)",
+  "source_url": "https://peraturan.go.id/files/bn774-2020.pdf",
+  "checked": "2026-10-23",
+  "categories": [
+    { "name": "Baik", "min": 1, "max": 50, "colour_name": "hijau" },
+    { "name": "Sedang", "min": 51, "max": 100, "colour_name": "biru" },
+    { "name": "Tidak Sehat", "min": 101, "max": 200, "colour_name": "kuning" },
+    { "name": "Sangat Tidak Sehat", "min": 201, "max": 300, "colour_name": "merah" },
+    { "name": "Berbahaya", "min": 301, "max": null, "colour_name": "hitam" }
+  ],
+  "pm25_24h_breakpoints_ug_m3": [
+    { "ispu": 50, "concentration": 15.5 },
+    { "ispu": 100, "concentration": 55.4 },
+    { "ispu": 200, "concentration": 150.4 },
+    { "ispu": 300, "concentration": 250.4 },
+    { "ispu": 301, "concentration": 500, "note": "top row of the table reads 500, not a range" }
+  ],
+  "formula": "I = ((Ia - Ib) / (Xa - Xb)) * (Xx - Xb) + Ib",
+  "rule": "The scale is printed as reference beside model values. Categories and colours are assigned only to official KLHK readings."
+}

@@ -1,0 +1,11 @@
+node_modules/
+.wrangler/
+.dev.vars
+.build/
+.env
+.env.*
+!.env.example
+*.key
+map-key
+*.log
+.DS_Store

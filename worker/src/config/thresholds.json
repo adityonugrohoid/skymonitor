@@ -1,0 +1,10 @@
+{
+  "stale_hours": {
+    "fire": 6,
+    "rain": 12,
+    "weather": 24
+  },
+  "cell_km": 2,
+  "upwind_radius_km": 40,
+  "landfill_baseline_days": 30
+}
