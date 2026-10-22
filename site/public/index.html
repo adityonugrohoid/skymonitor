@@ -32,18 +32,25 @@
 <script>
 (async function () {
   var el = document.getElementById("notice");
+  var officialHint = " Lihat sumber resmi di bawah.";
   try {
     var r = await fetch("/latest/status.json", { cache: "no-store" });
     if (!r.ok) { throw new Error("status " + r.status); }
     var s = await r.json();
-    var stale = Object.keys(s.feeds).filter(function (k) { return s.feeds[k].stale; });
+    // Age is computed here too, so a stopped pipeline cannot leave a fresh
+    // flag behind: a feed is stale if the job said so or if the whole file
+    // is older than that feed's threshold.
+    var ageHours = (Date.now() - Date.parse(s.generated_at)) / 3600000;
+    var stale = Object.keys(s.feeds).filter(function (k) {
+      return s.feeds[k].stale || !(ageHours <= s.feeds[k].threshold_hours);
+    });
     if (stale.length > 0) {
-      el.textContent = "Data belum tersedia atau tidak diperbarui (" + stale.join(", ") + "). Lihat sumber resmi di bawah.";
+      el.textContent = "Data belum tersedia atau tidak diperbarui (" + stale.join(", ") + ")." + officialHint;
       return;
     }
     el.textContent = "Data diperbarui " + s.generated_at + ".";
   } catch (e) {
-    el.textContent = "Status data tidak dapat dimuat. Lihat sumber resmi di bawah.";
+    el.textContent = "Status data tidak dapat dimuat." + officialHint;
   }
 })();
 </script>

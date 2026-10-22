@@ -16,6 +16,6 @@ problem. Expect an acknowledgement within 7 days.
 
 ## What the site is
 
-A static site plus one scheduled Worker. The Worker is the only component
+A static site plus one scheduled GitHub Actions job. The job is the only component
 with secrets. The browser never calls an upstream API and never sends
 anything to the project.

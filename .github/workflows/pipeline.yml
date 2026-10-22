@@ -1,0 +1,38 @@
+name: pipeline
+
+# Manual trigger only until the R2 secrets exist on the repository. The
+# schedule line is added in the pull request that follows their creation:
+#   schedule:
+#     - cron: "*/15 * * * *"
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pipeline
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: pipeline/package-lock.json
+      - run: npm ci
+      - run: npm run pipeline
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: skymonitor-data
+          FIRMS_MAP_KEY: ${{ secrets.FIRMS_MAP_KEY }}

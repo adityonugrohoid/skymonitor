@@ -7,7 +7,7 @@ writing). These are the repo-specific ones.
 1. No personal data, ever: no names, home coordinates, phone numbers or
    health details, in code, fixtures, docs, screenshots or commit messages.
    Coordinates of public facilities (landfills, stations) are fine.
-2. No keys in tracked files. Upstream keys live in `wrangler secret` and in
+2. No keys in tracked files. Upstream keys live in GitHub Actions secrets and in
    the maintainer's local key file; scripts read them, files never contain
    them.
 3. Wording rules in `CONTRIBUTING.md` apply to every string, including UI

@@ -42,7 +42,7 @@ and station coordinates are public facilities and are fine.
 
 ## No keys in the repo
 
-Upstream keys live in `wrangler secret` and in the maintainer's local key
+Upstream keys live in GitHub Actions secrets and in the maintainer's local key
 file. The build and deploy scripts read them from there. A key in a tracked
 file is a blocking review finding, and the key is rotated.
 
